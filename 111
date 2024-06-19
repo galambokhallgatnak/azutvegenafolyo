@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Az út végén a folyó</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            text-align: center;
+        }
+        .hidden {
+            display: none;
+        }
+        button {
+            background-color: white;
+            color: black;
+            border: none;
+            padding: 10px 20px;
+            margin: 20px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: grey;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="intro">
+            <h1>Te melyik karakter lennél <i>Az út végén a folyóból</i>?</h1>
+            <button onclick="startQuiz()">Tovább</button>
+        </div>
+        <div id="quiz" class="hidden">
+            <div id="question-container">
+                <!-- A kérdések dinamikusan jelennek meg itt -->
+            </div>
+            <button onclick="nextQuestion()" id="next-button" class="hidden">Tovább</button>
+        </div>
+        <div id="result" class="hidden">
+            <h1 id="result-text"></h1>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "Egy csecsemő hangosan sír melletted a szobában. Mit teszel?",
+                answers: {
+                    A: "Várom, hogy valaki más oldja meg a helyzetet. Közben nagyon frusztrál a sírás.",
+                    B: "Megnyugtatnám, de nem megy. Elmegyek.",
+                    C: "Azt csinálom, amire megkérnek.",
+                    D: "Megetetem, elringatom. Tudom, mit kell ilyenkor csinálni egy csecsemővel."
+                }
+            },
+            {
+                question: "Melyik szereplő vagy egy megcsalásban?",
+                answers: {
+                    A: "Akit megcsalnak.",
+                    B: "Aki megcsalja a párját.",
+                    C: "Akivel megcsalja a párját.",
+                    D: "Aki beledumál, kioktatja ezt a hármast."
+                }
+            },
+            {
+                question: "Alá akarnak íratni veled egy szerződést, aminek a tartalmával nem értesz egyet. Mit teszel?",
+                answers: {
+                    A: "Megtalálom a módját, hogy ne írjam alá, még ha utálni is fognak érte.",
+                    B: "Ordibálok mindenkivel, aztán kettétépem.",
+                    C: "Azonnal aláírom, ha ezt kérik.",
+                    D: "Ordibálok mindenkivel, de azért végül aláírom."
+                }
+            },
+            {
+                question: "Mit csinálnál végre, ha lenne rá időd?",
+                answers: {
+                    A: "Horgászás.",
+                    B: "Magammal foglalkoznék, pihennék, nyaralnék.",
+                    C: "Amit mondanak. Az lenne jó, ha végre nem nekem kéne ezen gondolkodni.",
+                    D: "Sütés, főzés, takarítás."
+                }
+            },
+            {
+                question: "Kiért áldozod/ áldoznád fel a legtöbb dolgot az életedben?",
+                answers: {
+                    A: "A gyerekemért.",
+                    B: "Magamért.",
+                    C: "A páromért.",
+                    D: "A testvéremért."
+                }
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let answers = {A: 0, B: 0, C: 0, D: 0};
+
+        function startQuiz() {
+            document.getElementById('intro').classList.add('hidden');
+            document.getElementById('quiz').classList.remove('hidden');
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const questionContainer = document.getElementById('question-container');
+            questionContainer.innerHTML = '';
+            const question = questions[currentQuestionIndex];
+            const questionElement = document.createElement('h2');
+            questionElement.textContent = question.question;
+            questionContainer.appendChild(questionElement);
+            for (const [key, value] of Object.entries(question.answers)) {
+                const button = document.createElement('button');
+                button.textContent = value;
+                button.onclick = () => selectAnswer(key);
+                questionContainer.appendChild(button);
+            }
+            document.getElementById('next-button').classList.add('hidden');
+        }
+
+        function selectAnswer(answer) {
+            answers[answer]++;
+            if (currentQuestionIndex < questions.length - 1) {
+                document.getElementById('next-button').classList.remove('hidden');
+            } else {
+                showResult();
+            }
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            showQuestion();
+        }
+
+        function showResult() {
+            document.getElementById('quiz').classList.add('hidden');
+            document.getElementById('result').classList.remove('hidden');
+            const maxAnswer = Object.keys(answers).reduce((a, b) => answers[a] > answers[b] ? a : b);
+            let resultText = '';
+            switch (maxAnswer) {
+                case 'A':
+                    resultText = 'Jani';
+                    break;
+                case 'B':
+                    resultText = 'Rózsi';
+                    break;
+                case 'C':
+                    resultText = 'Misi';
+                    break;
+                case 'D':
+                    resultText = 'Berta';
+                    break;
+            }
+            document.getElementById('result-text').textContent = resultText;
+        }
+    </script>
+</body>
+</html>
